@@ -4,3 +4,5 @@ GET {{RESTAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{RESTAPI_HostAddress}}/book
+Accept: application/json

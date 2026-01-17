@@ -30,3 +30,6 @@ Content-Type: application/json
   "author": "Updated Author Name",
   "yearPublished": 2027
 }
+
+###
+DELETE {{RESTAPI_HostAddress}}/book/4

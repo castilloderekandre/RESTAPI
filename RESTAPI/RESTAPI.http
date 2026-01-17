@@ -6,3 +6,7 @@ Accept: application/json
 ###
 GET {{RESTAPI_HostAddress}}/book
 Accept: application/json
+
+###
+GET {{RESTAPI_HostAddress}}/book/2
+Accept: application/json

@@ -20,7 +20,16 @@ namespace RESTAPI.Controllers
         {
             return Ok(books);
         }
-
+        [HttpGet("{id}")]
+        public ActionResult<Book> GetBookById(int id)
+        {
+            var book = books.FirstOrDefault(b => b.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return Ok(book);
+        }
         public IActionResult Index()
         {
             return View();

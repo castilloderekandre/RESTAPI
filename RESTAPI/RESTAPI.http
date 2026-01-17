@@ -8,7 +8,7 @@ GET {{RESTAPI_HostAddress}}/book
 Accept: application/json
 
 ###
-GET {{RESTAPI_HostAddress}}/book/2
+GET {{RESTAPI_HostAddress}}/book/4
 Accept: application/json
 
 ###
@@ -19,4 +19,14 @@ Content-Type: application/json
   "title": "New Book Title",
   "author": "Author Name",
   "yearPublished": 2026
+}
+
+###
+PUT {{RESTAPI_HostAddress}}/book/4
+Content-Type: application/json
+{
+  "id": 4,
+  "title": "Updated Book Title",
+  "author": "Updated Author Name",
+  "yearPublished": 2027
 }

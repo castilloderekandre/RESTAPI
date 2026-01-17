@@ -41,6 +41,24 @@ namespace RESTAPI.Controllers
             return CreatedAtAction(nameof(AddBook), new { id = newBook.Id}, newBook);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateBook(int id, Book updatedBook)
+        {
+            var book = books.FirstOrDefault(b => b.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            book.Id = updatedBook.Id;
+            book.Title = updatedBook.Title;
+            book.Author = updatedBook.Author;
+            book.YearPublished = updatedBook.YearPublished;
+
+            return NoContent();
+        }
+
+
         public IActionResult Index()
         {
             return View();

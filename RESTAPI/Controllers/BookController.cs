@@ -30,6 +30,17 @@ namespace RESTAPI.Controllers
             }
             return Ok(book);
         }
+
+        [HttpPost]
+        public ActionResult<Book> AddBook(Book newBook)
+        {
+            if (newBook == null)
+                return BadRequest();
+
+            books.Add(newBook);
+            return CreatedAtAction(nameof(AddBook), new { id = newBook.Id}, newBook);
+        }
+
         public IActionResult Index()
         {
             return View();

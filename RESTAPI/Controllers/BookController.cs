@@ -58,6 +58,17 @@ namespace RESTAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBook(int id)
+        {
+            var book = books.FirstOrDefault(b => b.Id == id);
+            if (book == null)
+                return NotFound();
+
+            books.Remove(book);
+
+            return NoContent();
+        }
 
         public IActionResult Index()
         {

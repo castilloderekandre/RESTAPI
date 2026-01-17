@@ -10,3 +10,13 @@ Accept: application/json
 ###
 GET {{RESTAPI_HostAddress}}/book/2
 Accept: application/json
+
+###
+POST {{RESTAPI_HostAddress}}/book
+Content-Type: application/json
+{
+  "id": 4,
+  "title": "New Book Title",
+  "author": "Author Name",
+  "yearPublished": 2026
+}

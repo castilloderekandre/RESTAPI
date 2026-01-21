@@ -2,5 +2,7 @@
 {
     public class WeatherDto
     {
+        public int TemperatureCelsius { get; set; }
+
     }
 }

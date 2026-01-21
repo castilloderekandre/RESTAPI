@@ -1,4 +1,4 @@
-using RESTAPI;
+using RESTAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +15,9 @@ builder.Services.AddHttpClient<GeocoderApiClient>(client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
+builder.Services.AddHttpClient<OpenWeatherApiClient>(client =>
 {
-    client.BaseAddress = new Uri("https://api.weatherapi.org//");
+    client.BaseAddress = new Uri("https://api.openweathermap.org/data/2.5/");
     client.Timeout = TimeSpan.FromSeconds(10);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });

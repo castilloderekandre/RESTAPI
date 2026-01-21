@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RESTAPI.Clients;
+using RESTAPI.Dtos;
 
 namespace RESTAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GeocoderController : Controller
+    public class GeocoderController(GeocoderApiClient client) : Controller
     {
-        private readonly GeocoderApiClient _client;
-        public GeocoderController(GeocoderApiClient client)
-        {
-            _client = client;
-        }
+        private readonly GeocoderApiClient _client = client;
 
         [HttpGet("{city}")]
-        public async Task<string> Get(string city)
+        public async Task<GeocoderDto?> Get(string city)
         {
             return await _client.GetCoordinatesByCityAsync(city);
         }

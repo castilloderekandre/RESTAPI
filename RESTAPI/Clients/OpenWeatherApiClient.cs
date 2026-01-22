@@ -21,15 +21,5 @@ namespace RESTAPI.Clients
 
             return weatherDto;
         }
-
-        public async Task<OpenWeatherDto?> GetWeatherByCityAsync(string city)
-        {
-            GeocoderDto? geocoderDto = await _geocoderApiClient.GetCoordinatesByCityAsync(city)
-                ?? throw new InvalidOperationException($"Could not find coordinates for city: {city}");
-
-            OpenWeatherDto? weatherDto = await GetWeatherByCoordinatesAsync(geocoderDto.Lat, geocoderDto.Lon);
-
-            return weatherDto;
-        }
     }
 }

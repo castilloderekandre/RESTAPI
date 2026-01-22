@@ -1,3 +1,4 @@
+using RESTAPI.Services;
 using RESTAPI.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,8 @@ builder.Services.AddHttpClient<OpenWeatherApiClient>(client =>
     client.Timeout = TimeSpan.FromSeconds(10);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+builder.Services.AddScoped<OpenWeatherService>();
 
 var app = builder.Build();
 

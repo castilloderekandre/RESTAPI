@@ -1,19 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RESTAPI.Clients;
-using RESTAPI.Dtos;
+using RESTAPI.DTOs;
 
 namespace RESTAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GeocoderController(GeocoderApiClient client) : Controller
+    public class GeocoderController(GeocoderApiClient geocoderApiClient) : Controller
     {
-        private readonly GeocoderApiClient _client = client;
+        private readonly GeocoderApiClient _geocoderApiClient = geocoderApiClient;
 
         [HttpGet("{city}")]
-        public async Task<GeocoderDto?> Get(string city)
+        public async Task<IActionResult> Get(string city)
         {
-            return await _client.GetCoordinatesByCityAsync(city);
+            if (string.IsNullOrEmpty(city))
+                return BadRequest("City name cannot be null or empty.");
+
+            try
+            {
+                var geocoderDto = await _geocoderApiClient.GetCoordinatesByCityAsync(city);
+                return Ok(geocoderDto);
+            }
+            catch (Exception)
+            {
+                return NotFound($"Coordinates for city '{city}' not found.");
+            }
         }
 
         public IActionResult Index()

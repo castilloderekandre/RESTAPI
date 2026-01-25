@@ -1,4 +1,4 @@
-﻿using RESTAPI.Dtos;
+﻿using RESTAPI.DTOs;
 
 namespace RESTAPI.Clients
 {
@@ -9,16 +9,17 @@ namespace RESTAPI.Clients
                 ?? throw new InvalidOperationException(
                     "OPENWEATHER_API_KEY environment variable is not set.");
 
-        public async Task<GeocoderDto?> GetCoordinatesByCityAsync(string city)
+        public async Task<GeocoderDTO?> GetCoordinatesByCityAsync(string city)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(
                 $"direct?q={Uri.EscapeDataString(city)}&limit=1&appid={_apikey}");
 
-            response.EnsureSuccessStatusCode();
+            if(!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"Geocoding API error ({response.StatusCode})");
 
-            List<GeocoderDto>? geocoderDto = await response.Content.ReadFromJsonAsync<List<GeocoderDto>>();
+            List<GeocoderDTO>? geocoderDTO = await response.Content.ReadFromJsonAsync<List<GeocoderDTO>>();
 
-            return geocoderDto?.FirstOrDefault();
+            return geocoderDTO?.FirstOrDefault();
         }
     }
 }

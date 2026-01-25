@@ -12,15 +12,20 @@ namespace RESTAPI.Controllers
         //-95.3676974
         private readonly OpenWeatherService _openWeatherService = openWeatherService;
 
-        [HttpGet("{city}")]
-        public async Task<IActionResult> Get(string city)
+        [HttpGet("city/{city}")]
+        public async Task<IActionResult> GetByCity(string city)
         {
-            var weatherDto = await _openWeatherService.GetWeatherByCityAsync(city);
-            if (weatherDto == null)
+            if (string.IsNullOrWhiteSpace(city))
+                return BadRequest("City name cannot be empty.");
+            try
+            {
+                var weatherDto = await _openWeatherService.GetWeatherByCityAsync(city);
+                return Ok(weatherDto);
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-            return Ok(weatherDto);
         }
 
         [HttpGet]
@@ -28,12 +33,17 @@ namespace RESTAPI.Controllers
             [FromQuery] double lat,
             [FromQuery] double lon)
         {
-            var weatherDto = await _openWeatherService.GetWeatherByCoordinatesAsync(lat, lon);
-            if (weatherDto == null)
+            if (lat < -90 || lat > 90 || lon < -180 || lon > 180)
+                return BadRequest("Invalid latitude or longitude values.");
+            try
+            {
+                var weatherDto = await _openWeatherService.GetWeatherByCoordinatesAsync(lat, lon);
+                return Ok(weatherDto);
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-            return Ok(weatherDto);
         }
 
         public IActionResult Index()

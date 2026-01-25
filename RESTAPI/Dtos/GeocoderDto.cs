@@ -1,6 +1,6 @@
-﻿namespace RESTAPI.Dtos
+﻿namespace RESTAPI.DTOs
 {
-    public class GeocoderDto
+    public class GeocoderDTO
     {
         public double Lat { get; set; }
         public double Lon { get; set; }

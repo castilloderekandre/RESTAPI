@@ -1,6 +1,6 @@
-﻿namespace RESTAPI.Dtos
+﻿namespace RESTAPI.DTOs
 {
-    public class OpenWeatherDto
+    public class OpenWeatherDTO
     {
         public mainDto main { get; set; }
     }

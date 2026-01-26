@@ -1,10 +1,12 @@
 ﻿using RESTAPI.Clients;
 using RESTAPI.DTOs;
+using RESTAPI.Services.Interfaces;
 
 namespace RESTAPI.Services
 {
-    public class OpenWeatherService(OpenWeatherApiClient openWeatherApiClient,
-        GeocoderApiClient geocoderApiClient)
+    public class OpenWeatherService(
+        OpenWeatherApiClient openWeatherApiClient,
+        GeocoderApiClient geocoderApiClient) : IOpenWeatherService
     {
         private readonly OpenWeatherApiClient _openWeatherApiClient = openWeatherApiClient;
         private readonly GeocoderApiClient _geocoderApiClient = geocoderApiClient;

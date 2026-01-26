@@ -1,8 +1,9 @@
-﻿using RESTAPI.DTOs;
+﻿using RESTAPI.Clients.Interfaces;
+using RESTAPI.DTOs;
 
 namespace RESTAPI.Clients
 {
-    public class GeocoderApiClient(HttpClient httpClient)
+    public class GeocoderApiClient(HttpClient httpClient) : IGeocoderApiClient
     {
         private readonly HttpClient _httpClient = httpClient;
         private readonly string _apikey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY")

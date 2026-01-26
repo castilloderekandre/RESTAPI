@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RESTAPI.Clients;
 using RESTAPI.Services;
+using RESTAPI.Services.Interfaces;
 
 namespace RESTAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OpenWeatherController(OpenWeatherService openWeatherService) : Controller
+    public class OpenWeatherController(IOpenWeatherService openWeatherService) : Controller
     {
         //29.7589382
         //-95.3676974
-        private readonly OpenWeatherService _openWeatherService = openWeatherService;
+        private readonly IOpenWeatherService _openWeatherService = openWeatherService;
 
         [HttpGet("city/{city}")]
         public async Task<IActionResult> GetByCity(string city)

@@ -1,30 +1,57 @@
 ﻿using RESTAPI.Clients;
+using RESTAPI.Clients.Interfaces;
 using RESTAPI.DTOs;
+using RESTAPI.Exceptions;
 using RESTAPI.Services.Interfaces;
 
 namespace RESTAPI.Services
 {
     public class OpenWeatherService(
-        OpenWeatherApiClient openWeatherApiClient,
-        GeocoderApiClient geocoderApiClient) : IOpenWeatherService
+        IOpenWeatherApiClient openWeatherApiClient,
+        IGeocoderApiClient geocoderApiClient) : IOpenWeatherService
     {
-        private readonly OpenWeatherApiClient _openWeatherApiClient = openWeatherApiClient;
-        private readonly GeocoderApiClient _geocoderApiClient = geocoderApiClient;
+        private readonly IOpenWeatherApiClient _openWeatherApiClient = openWeatherApiClient;
+        private readonly IGeocoderApiClient _geocoderApiClient = geocoderApiClient;
 
-        public async Task<OpenWeatherDTO?> GetWeatherByCoordinatesAsync(double lat, double lon)
+        public async Task<OpenWeatherDTO> GetWeatherByCoordinatesAsync(double lat, double lon)
         {
-            OpenWeatherDTO? weatherDTO = await _openWeatherApiClient.GetWeatherByCoordinatesAsync(lat, lon);
-            return weatherDTO;
+            try
+            {
+                return await _openWeatherApiClient.GetWeatherByCoordinatesAsync(lat, lon)
+                    ?? throw new LocationNotFoundException($"{lat}, {lon}");
+            }
+            catch (ExternalAPIException ex)
+            {
+                throw new WeatherUnavailableException($"{lat}, {lon}", ex);
+            }
         }
 
-        public async Task<OpenWeatherDTO?> GetWeatherByCityAsync(string city)
+        public async Task<GeocoderDTO> GetCoordinatesByCityAsync(string city)
         {
-            GeocoderDTO? geocoderDTO = await _geocoderApiClient.GetCoordinatesByCityAsync(city)
-                ?? throw new InvalidOperationException($"Could not find coordinates for city: {city}");
+            try
+            {
+                return await _geocoderApiClient.GetCoordinatesByCityAsync(city)
+                    ?? throw new LocationNotFoundException(city);
+            }
+            catch (ExternalAPIException ex)
+            {
+                throw new WeatherUnavailableException(city, ex);
+            }
+        }
 
-            OpenWeatherDTO? weatherDTO = await _openWeatherApiClient.GetWeatherByCoordinatesAsync(geocoderDTO.Lat, geocoderDTO.Lon);
-
-            return weatherDTO;
+        public async Task<OpenWeatherDTO> GetWeatherByCityAsync(string city)
+        {
+            GeocoderDTO geocoderDTO = await GetCoordinatesByCityAsync(city);
+            
+            try
+            {
+                return await _openWeatherApiClient.GetWeatherByCoordinatesAsync(geocoderDTO.Lat, geocoderDTO.Lon)
+                    ?? throw new LocationNotFoundException(city);
+            }
+            catch (ExternalAPIException ex)
+            {
+                throw new WeatherUnavailableException(city, ex);
+            }
         }
     }
 }

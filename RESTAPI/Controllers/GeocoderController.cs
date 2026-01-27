@@ -2,16 +2,18 @@
 using RESTAPI.Clients;
 using RESTAPI.Clients.Interfaces;
 using RESTAPI.DTOs;
+using RESTAPI.Exceptions;
+using RESTAPI.Services.Interfaces;
 
 namespace RESTAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GeocoderController(IGeocoderApiClient geocoderApiClient) : Controller
+    public class GeocoderController(IOpenWeatherService openWeatherService) : Controller
     {
-        private readonly IGeocoderApiClient _geocoderApiClient = geocoderApiClient;
+        private readonly IOpenWeatherService _openWeatherService = openWeatherService;
 
-        [HttpGet("{city}")]
+        [HttpGet("city/{city}")]
         public async Task<IActionResult> Get(string city)
         {
             if (string.IsNullOrEmpty(city))
@@ -19,12 +21,20 @@ namespace RESTAPI.Controllers
 
             try
             {
-                var geocoderDto = await _geocoderApiClient.GetCoordinatesByCityAsync(city);
+                var geocoderDto = await _openWeatherService.GetCoordinatesByCityAsync(city);
                 return Ok(geocoderDto);
             }
-            catch (Exception)
+            catch (LocationNotFoundException)
             {
                 return NotFound($"Coordinates for city '{city}' not found.");
+            }
+            catch (ExternalAPIException ex)
+            {
+                return StatusCode(503, $"External API error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 

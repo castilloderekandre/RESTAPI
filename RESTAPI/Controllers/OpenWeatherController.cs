@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RESTAPI.Clients;
+using RESTAPI.Exceptions;
 using RESTAPI.Services;
 using RESTAPI.Services.Interfaces;
 
@@ -23,9 +24,13 @@ namespace RESTAPI.Controllers
                 var weatherDto = await _openWeatherService.GetWeatherByCityAsync(city);
                 return Ok(weatherDto);
             }
-            catch (Exception)
+            catch (LocationNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
+            }
+            catch (WeatherUnavailableException ex)
+            {
+                return StatusCode(503, ex.Message);
             }
         }
 
@@ -41,9 +46,13 @@ namespace RESTAPI.Controllers
                 var weatherDto = await _openWeatherService.GetWeatherByCoordinatesAsync(lat, lon);
                 return Ok(weatherDto);
             }
-            catch (Exception)
+            catch (LocationNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
+            }
+            catch (WeatherUnavailableException ex)
+            {
+                return StatusCode(503, ex.Message);
             }
         }
 

@@ -19,23 +19,8 @@ namespace RESTAPI.Controllers
             if (string.IsNullOrEmpty(city))
                 return BadRequest("City name cannot be null or empty.");
 
-            try
-            {
-                var geocoderDto = await _openWeatherService.GetCoordinatesByCityAsync(city);
-                return Ok(geocoderDto);
-            }
-            catch (LocationNotFoundException)
-            {
-                return NotFound($"Coordinates for city '{city}' not found.");
-            }
-            catch (ExternalAPIException ex)
-            {
-                return StatusCode(503, $"External API error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var geocoderDto = await _openWeatherService.GetCoordinatesByCityAsync(city);
+            return Ok(geocoderDto);
         }
 
         public IActionResult Index()

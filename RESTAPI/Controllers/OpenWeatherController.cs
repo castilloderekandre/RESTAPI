@@ -19,19 +19,9 @@ namespace RESTAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(city))
                 return BadRequest("City name cannot be empty.");
-            try
-            {
-                var weatherDto = await _openWeatherService.GetWeatherByCityAsync(city);
-                return Ok(weatherDto);
-            }
-            catch (LocationNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (WeatherUnavailableException ex)
-            {
-                return StatusCode(503, ex.Message);
-            }
+
+            var weatherDto = await _openWeatherService.GetWeatherByCityAsync(city);
+            return Ok(weatherDto);
         }
 
         [HttpGet]
@@ -41,19 +31,9 @@ namespace RESTAPI.Controllers
         {
             if (lat < -90 || lat > 90 || lon < -180 || lon > 180)
                 return BadRequest("Invalid latitude or longitude values.");
-            try
-            {
-                var weatherDto = await _openWeatherService.GetWeatherByCoordinatesAsync(lat, lon);
-                return Ok(weatherDto);
-            }
-            catch (LocationNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (WeatherUnavailableException ex)
-            {
-                return StatusCode(503, ex.Message);
-            }
+
+            var weatherDto = await _openWeatherService.GetWeatherByCoordinatesAsync(lat, lon);
+            return Ok(weatherDto);
         }
 
         public IActionResult Index()

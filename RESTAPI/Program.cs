@@ -2,6 +2,7 @@ using RESTAPI.Services;
 using RESTAPI.Clients;
 using RESTAPI.Services.Interfaces;
 using RESTAPI.Clients.Interfaces;
+using RESTAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseExceptionHandlingMiddleware();
 
 app.UseHttpsRedirection();
 
